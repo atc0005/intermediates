@@ -1,6 +1,7 @@
 name: Update pool
 on:
-  push:
+  # Skipping workflow execution on `push` events.
+  # push:
   schedule:
     - cron: '4 2 * * *' # daily at 2:04
 permissions:
