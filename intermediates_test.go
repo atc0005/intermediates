@@ -14,17 +14,21 @@ import (
 func TestBadSSL(t *testing.T) {
 	t.Skip("badssl.com certificates are currently expired")
 	c, err := tls.Dial("tcp", "incomplete-chain.badssl.com:443", &tls.Config{
+		//nolint:gosec // skip default validation replaced by custom VerifyConnection function
 		InsecureSkipVerify: true,
 		VerifyConnection:   VerifyConnection,
 	})
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer c.Close()
+	defer func() {
+		_ = c.Close()
+	}()
 }
 
 func TestIncompleteChain(t *testing.T) {
 	c, err := tls.Dial("tcp", "google.com:443", &tls.Config{
+		//nolint:gosec // skip default validation replaced by custom VerifyConnection function
 		InsecureSkipVerify: true,
 		VerifyConnection: func(cs tls.ConnectionState) error {
 			cs.PeerCertificates = cs.PeerCertificates[:1]
@@ -34,7 +38,9 @@ func TestIncompleteChain(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer c.Close()
+	defer func() {
+		_ = c.Close()
+	}()
 }
 
 func TestCount(t *testing.T) {

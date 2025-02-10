@@ -19,6 +19,7 @@ import (
 func ExampleVerifyConnection() {
 	tr := http.DefaultTransport.(*http.Transport).Clone()
 	tr.TLSClientConfig = &tls.Config{
+		//nolint:gosec
 		// Set InsecureSkipVerify to skip the default validation we are
 		// replacing. This will not disable VerifyConnection.
 		InsecureSkipVerify: true,
@@ -30,6 +31,8 @@ func ExampleVerifyConnection() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer r.Body.Close()
+	defer func() {
+		_ = r.Body.Close()
+	}()
 	fmt.Println(r.StatusCode)
 }

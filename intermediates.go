@@ -29,17 +29,17 @@ import (
 )
 
 //go:embed intermediates.bin
-var compressedPEMPool string
+var compressedPEMPool string //nolint:gochecknoglobals
 
-var _poolOnce sync.Once
-var _pool *x509.CertPool
+var _poolOnce sync.Once  //nolint:gochecknoglobals
+var _pool *x509.CertPool //nolint:gochecknoglobals
 
 func pool() *x509.CertPool {
 	_poolOnce.Do(func() {
 		r := flate.NewReader(strings.NewReader(compressedPEMPool))
 		pemList, _ := io.ReadAll(r)
 		_pool = x509.NewCertPool()
-		_pool.AppendCertsFromPEM([]byte(pemList))
+		_pool.AppendCertsFromPEM(pemList)
 	})
 	return _pool
 }
