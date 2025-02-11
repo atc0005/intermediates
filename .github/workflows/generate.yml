@@ -85,7 +85,7 @@ jobs:
             docker run --rm \
                     -v "${{ github.workspace }}:/workdir" \
                     -w /workdir \
-                    ghcr.io/choffmeister/git-describe-semver:0.4.0 -- \
+                    ghcr.io/choffmeister/git-describe-semver:0.4.0 \
                     --next-release patch \
                     --format="version=<version>"
           } >> $GITHUB_OUTPUT
