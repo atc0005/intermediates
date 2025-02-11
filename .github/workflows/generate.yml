@@ -23,16 +23,24 @@ permissions:
   contents: write
 
 jobs:
-  update:
-    name: Download, test, and commit changes
+  git_describe_semver:
+    name: Generate semantic release version using git-describe-semver
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    container:
-      image: "ghcr.io/atc0005/go-ci:go-ci-oldstable"
+    # Default: 360 minutes
+    timeout-minutes: 5
+    # https://docs.github.com/en/actions/using-jobs/defining-outputs-for-jobs
+    outputs:
+      version: ${{ steps.git-describe-semver.outputs.version }}
 
     steps:
-      - name: Checkout
+      - name: Print Docker version
+        run: docker --version
+
+      - name: Clone repo with full history
         uses: actions/checkout@v4
+        with:
+          # Needed in order to retrieve tags for use with semver calculations
+          fetch-depth: 0
 
       # Mark the current working directory as a safe directory in git to
       # resolve "dubious ownership" complaints.
@@ -45,12 +53,9 @@ jobs:
         # run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
         run: git config --global --add safe.directory "${PWD}"
 
-      - name: Regenerate pool
-        run: go generate
-
-      - name: Run tests
-        run: go test -race ./...
-
+      # https://github.com/choffmeister/git-describe-semver/pkgs/container/git-describe-semver
+      # https://github.com/choffmeister/git-describe-semver/blob/v0.3.11/action.yaml
+      # https://github.com/choffmeister/git-describe-semver/blob/v0.4.0/action.yaml
       # - name: Record semantic version using git-describe-semver
       #   uses: docker://ghcr.io/choffmeister/git-describe-semver:0.3.11
       #   id: git-describe-semver
@@ -77,6 +82,35 @@ jobs:
         run: |
           echo "${{ steps.git-describe-semver.outputs.version }}"
 
+  update:
+    name: Download, test, and commit changes
+    needs: git_describe_semver
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    container:
+      image: "ghcr.io/atc0005/go-ci:go-ci-oldstable"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Mark the current working directory as a safe directory in git to
+      # resolve "dubious ownership" complaints.
+      #
+      # https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables
+      # https://confluence.atlassian.com/bbkb/git-command-returns-fatal-error-about-the-repository-being-owned-by-someone-else-1167744132.html
+      # https://github.com/actions/runner-images/issues/6775
+      # https://github.com/actions/checkout/issues/766
+      - name: Mark the current working directory as a safe directory in git
+        # run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+        run: git config --global --add safe.directory "${PWD}"
+
+      - name: Regenerate pool
+        run: go generate
+
+      - name: Run tests
+        run: go test -race ./...
+
       - name: Configure Git author settings
         run: |-
           git config user.name "GitHub Actions"
@@ -88,10 +122,12 @@ jobs:
           git config --get user.email
 
       - name: Commit and push if changed
+        env:
+          NEXT_TAG: ${{ needs.git_describe_semver.outputs.version }}
         run: |-
           git commit -a -m "intermediates: update certificates" || exit 0
 
-          bash create-tag.sh "${{ steps.git-describe-semver.outputs.version }}"
+          bash create-tag.sh "${NEXT_TAG}"
 
           git push
           git push --tags
