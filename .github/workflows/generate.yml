@@ -4,7 +4,7 @@ on:
   # push:
 
   # Permit manually triggering workflow for testing.
-  workflow_call:
+  workflow_dispatch:
 
   # This is the primary means of triggering this workflow.
   schedule:
