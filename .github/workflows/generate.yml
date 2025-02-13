@@ -21,6 +21,7 @@ on:
 
 permissions:
   contents: write
+  actions:  write # permit triggering other workflows
 
 jobs:
   git_describe_semver:
