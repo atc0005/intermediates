@@ -19,9 +19,12 @@ on:
     # * * * * *
     - cron: '4 2 * * *' # daily at 2:04
 
-permissions:
-  contents: write
-  actions:  write # permit triggering other workflows
+# Temporarily disable permission limits as part of troubleshooting failure
+# for this workflow to trigger execution of another workflow (release build).
+#
+#permissions:
+#  contents: write
+#  actions:  write # permit triggering other workflows
 
 jobs:
   git_describe_semver:
