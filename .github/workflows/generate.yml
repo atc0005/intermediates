@@ -19,12 +19,9 @@ on:
     # * * * * *
     - cron: '4 2 * * *' # daily at 2:04
 
-# Temporarily disable permission limits as part of troubleshooting failure
-# for this workflow to trigger execution of another workflow (release build).
-#
-#permissions:
-#  contents: write
-#  actions:  write # permit triggering other workflows
+permissions:
+  contents: write
+  actions:  write # permit triggering other workflows
 
 jobs:
   git_describe_semver:
@@ -107,8 +104,23 @@ jobs:
       image: "ghcr.io/atc0005/go-ci:go-ci-oldstable"
 
     steps:
+      # https://github.com/prompt/examples-workflow-trigger
+      # https://medium.com/prompt/trigger-another-github-workflow-without-using-a-personal-access-token-f594c21373ef
+      # https://stackoverflow.com/questions/75348291/how-to-trigger-github-actions-workflow-whenever-a-new-tag-was-pushed
+      # https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication#using-the-github_token-in-a-workflow
+      # https://github.com/orgs/community/discussions/27028
+      # https://docs.github.com/en/developers/overview/managing-deploy-keys#deploy-keys
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Use custom SSH Deploy Key to create commits/tags & push them.
+          #
+          # This is done to work around restrictions associated with the
+          # default GITHUB_TOKEN used to push or pull content from a
+          # repository; to prevent infinite Workflow loops the tasks performed
+          # with the GITHUB_TOKEN do not trigger further Workflow runs (e.g.,
+          # the Workflow we're using to publish new releases).
+          ssh-key: "${{ secrets.COMMIT_KEY }}"
 
       # Mark the current working directory as a safe directory in git to
       # resolve "dubious ownership" complaints.
