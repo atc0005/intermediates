@@ -13,7 +13,7 @@ import (
 	"net/http"
 	"time"
 
-	"filippo.io/intermediates"
+	"atc0005/intermediates"
 )
 
 func ExampleVerifyConnection() {
