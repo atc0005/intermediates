@@ -14,6 +14,7 @@ Mozilla Root Program.
 
 - [Project home](#project-home)
 - [Overview](#overview)
+  - [`v1` branch](#v1-branch)
 - [Contributions](#contributions)
 - [Origin](#origin)
 - [License](#license)
@@ -38,10 +39,15 @@ fail to provide a full certificate chain but provide a valid, publicly
 trusted end-entity certificate. Some browsers implement similar strategies to
 successfully establish connections to these sites.
 
-This project applies light changes to the upstream project intended to support
-work in the `atc0005/check-cert` and `atc0005/cert-payload` projects. The
-current intent is to mothball this project if/when the upstream project
-provides similar functionality.
+### `v1` branch
+
+This branch applies light changes to the upstream project to provide automated
+tags and releases. The goal was to make it easier for dependent projects to
+maintain current versions of the intermediates bundle (e.g., via Dependabot's
+support for generating PRs based on dependency tags).
+
+Further work on this branch is paused in favor of breaking changes applied in
+later series. See the `master` branch for the latest information.
 
 ## Contributions
 
