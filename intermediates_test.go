@@ -1,4 +1,5 @@
 // Copyright 2021 Google LLC
+// Copyright 2025 Adam Chalkley
 //
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file or at
@@ -7,68 +8,103 @@
 package intermediates
 
 import (
-	"crypto/tls"
+	"crypto/x509"
 	"testing"
 )
 
-func TestBadSSL(t *testing.T) {
-	t.Skip("badssl.com certificates are currently expired")
-	c, err := tls.Dial("tcp", "incomplete-chain.badssl.com:443", &tls.Config{
-		//nolint:gosec // skip default validation replaced by custom VerifyConnection function
-		InsecureSkipVerify: true,
-		VerifyConnection:   VerifyConnection,
-	})
-	if err != nil {
+// FIXME:
+//
+// Setup helper function to provide a list of all subjects in
+// the returned collection.
+//
+// t.Logf("%s", Pool().Subjects())
+
+func TestCertsRetrievalCounts(t *testing.T) {
+	testFunc := func(t *testing.T, fn func() []*x509.Certificate, expectedCount int) {
+		if gotCount := len(fn()); gotCount != expectedCount {
+			t.Errorf("intermediates: failed to load all certificates; got %d certificates, wanted %d", gotCount, expectedCount)
+		} else {
+			t.Logf("intermediates: successfully loaded %d of %d certificates", gotCount, expectedCount)
+		}
+	}
+
+	testFunc(t, MustGetPublicAllIntermediateCerts, expectedCountPublicAllIntermediateCerts)
+	testFunc(t, MustGetMozillaIntermediateCerts, expectedCountMozillaIntermediateCertsReport)
+	testFunc(t, MustGetPublicIntermediateCertsRevoked, expectedCountPublicIntermediateCertsRevoked)
+}
+
+func TestCertsHashesRetrievalCounts(t *testing.T) {
+	testFunc := func(t *testing.T, fn func() []string, expectedCount int) {
+		if gotCount := len(fn()); gotCount != expectedCount {
+			t.Errorf("intermediates: failed to load all certificate hashes; got %d hashes, wanted %d", gotCount, expectedCount)
+		} else {
+			t.Logf("intermediates: successfully loaded %d of %d certificate hashes", gotCount, expectedCount)
+		}
+	}
+
+	testFunc(t, MustGetPublicAllIntermediateCertsHashes, expectedCountPublicAllIntermediateCertsHashes)
+	testFunc(t, MustGetMozillaIntermediateCertsHashes, expectedCountMozillaIntermediateCertsReportHashes)
+	testFunc(t, MustGetPublicIntermediateCertsRevokedHashes, expectedCountPublicIntermediateCertsRevokedHashes)
+}
+
+func TestCertsRetrievalFromGetFuncs(t *testing.T) {
+	if certs, err := GetPublicAllIntermediateCerts(); err != nil {
 		t.Fatal(err)
+	} else {
+		t.Logf("intermediates: successfully loaded %d certificates via GetPublicAllIntermediateCerts func.", len(certs))
 	}
-	defer func() {
-		_ = c.Close()
-	}()
-}
 
-func TestIncompleteChain(t *testing.T) {
-	c, err := tls.Dial("tcp", "google.com:443", &tls.Config{
-		//nolint:gosec // skip default validation replaced by custom VerifyConnection function
-		InsecureSkipVerify: true,
-		VerifyConnection: func(cs tls.ConnectionState) error {
-			cs.PeerCertificates = cs.PeerCertificates[:1]
-			return VerifyConnection(cs)
-		},
-	})
-	if err != nil {
+	if certs, err := GetMozillaIntermediateCerts(); err != nil {
 		t.Fatal(err)
+	} else {
+		t.Logf("intermediates: successfully loaded %d certificates via GetMozillaIntermediateCerts func.", len(certs))
 	}
-	defer func() {
-		_ = c.Close()
-	}()
+
+	if certs, err := GetPublicIntermediateCertsRevoked(); err != nil {
+		t.Fatal(err)
+	} else {
+		t.Logf("intermediates: successfully loaded %d certificates via GetPublicIntermediateCertsRevoked func.", len(certs))
+	}
 }
 
-func TestCount(t *testing.T) {
-	if gotCount := len(Pool().Subjects()); gotCount != expectedCount {
-		t.Logf("%s", Pool().Subjects())
-		t.Errorf("intermediates: parsed %d certificates, expected %d", gotCount, expectedCount)
+func TestCertsRetrievalFromMustGetFuncs(t *testing.T) {
+	certs := MustGetPublicAllIntermediateCerts()
+	t.Logf("intermediates: successfully loaded %d certificates via MustGetPublicAllIntermediateCerts func.", len(certs))
+
+	certs = MustGetMozillaIntermediateCerts()
+	t.Logf("intermediates: successfully loaded %d certificates via MustGetMozillaIntermediateCerts func.", len(certs))
+
+	certs = MustGetPublicIntermediateCertsRevoked()
+	t.Logf("intermediates: successfully loaded %d certificates via MustGetPublicIntermediateCertsRevoked func.", len(certs))
+}
+
+func TestCertsHashesRetrievalFromGetFuncs(t *testing.T) {
+	if certs, err := GetPublicAllIntermediateCertsHashes(); err != nil {
+		t.Fatal(err)
+	} else {
+		t.Logf("intermediates: successfully loaded %d certificate hashes via GetPublicAllIntermediateCertsHashes func.", len(certs))
+	}
+
+	if certs, err := GetMozillaIntermediateCertsHashes(); err != nil {
+		t.Fatal(err)
+	} else {
+		t.Logf("intermediates: successfully loaded %d certificate hashes via GetMozillaIntermediateCertsHashes func.", len(certs))
+	}
+
+	if certs, err := GetPublicIntermediateCertsRevokedHashes(); err != nil {
+		t.Fatal(err)
+	} else {
+		t.Logf("intermediates: successfully loaded %d certificate hashes via GetPublicIntermediateCertsRevokedHashes func.", len(certs))
 	}
 }
 
-func TestReuse(t *testing.T) {
-	a, b := Pool(), Pool()
-	a.AppendCertsFromPEM([]byte(`
------BEGIN CERTIFICATE-----
-MIICDzCCAXigAwIBAgIBADANBgkqhkiG9w0BAQQFADBCMQswCQYDVQQGEwJQTDEf
-MB0GA1UEChMWU3R1bm5lbCBEZXZlbG9wZXJzIEx0ZDESMBAGA1UEAxMJbG9jYWxo
-b3N0MB4XDTk5MDQwODE1MDkwOFoXDTAwMDQwNzE1MDkwOFowQjELMAkGA1UEBhMC
-UEwxHzAdBgNVBAoTFlN0dW5uZWwgRGV2ZWxvcGVycyBMdGQxEjAQBgNVBAMTCWxv
-Y2FsaG9zdDCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAsVBTLqiSWyPSpwfF
-bcEm3L8DTpbVgbVsmkpqe8hJ6sFnpeUxX3Djmwri2evbBYtRC4uQvdakWgzKMO5O
-Ro9OQ2bSwxXyAg9FtUvp9iqpdqPH9kUr2ag9lvZfIufV2ws9aEuJfUtPS/t0U2Vf
-aHq/1J28v0JonBSzTNFoK1TYissCAwEAAaMVMBMwEQYJYIZIAYb4QgEBBAQDAgZA
-MA0GCSqGSIb3DQEBBAUAA4GBAAhYFTngWc3tuMjVFhS4HbfFF/vlOgTu44/rv2F+
-ya1mEB93htfNxx3ofRxcjCdorqONZFwEba6xZ8/UujYfVmIGCBy4X8+aXd83TJ9A
-eSjTzV9UayOoGtmg8Dv2aj/5iabNeK1Qf35ouvlcTezVZt2ZeJRhqUHcGaE+apCN
-TC9Y
------END CERTIFICATE-----
-`))
-	if len(a.Subjects()) == len(b.Subjects()) {
-		t.Fail()
-	}
+func TestCertsHashesRetrievalFromMustGetFuncs(t *testing.T) {
+	certs := MustGetPublicAllIntermediateCertsHashes()
+	t.Logf("intermediates: successfully loaded %d certificate hashes via MustGetPublicAllIntermediateCertsHashes func.", len(certs))
+
+	certs = MustGetMozillaIntermediateCertsHashes()
+	t.Logf("intermediates: successfully loaded %d certificate hashes via MustGetMozillaIntermediateCertsHashes func.", len(certs))
+
+	certs = MustGetPublicIntermediateCertsRevokedHashes()
+	t.Logf("intermediates: successfully loaded %d certificate hashes via MustGetPublicIntermediateCertsRevokedHashes func.", len(certs))
 }

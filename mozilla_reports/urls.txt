@@ -1,0 +1,18 @@
+Overview:
+
+https://wiki.mozilla.org/CA/Intermediate_Certificates
+
+Reports:
+
+https://ccadb.my.salesforce-sites.com/mozilla/PublicAllIntermediateCertsWithPEMCSV
+https://ccadb.my.salesforce-sites.com/mozilla/MozillaIntermediateCertsCSVReport
+https://ccadb.my.salesforce-sites.com/mozilla/PublicIntermediateCertsRevokedWithPEMCSV
+
+License:
+
+https://www.ccadb.org/rootstores/usage#ccadb-data-usage-terms
+https://cdla.dev/permissive-2-0/
+
+See also:
+
+https://github.com/atc0005/intermediates

@@ -1,86 +1,424 @@
 // Copyright 2021 Google LLC
+// Copyright 2025 Adam Chalkley
 //
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file or at
 // https://developers.google.com/open-source/licenses/bsd
+//
+// Code in this file inspired by or generated with the help of:
+//
+// - ChatGPT, OpenAI
+// - Google Gemini
+// - Claude (Anthropic AI assistant)
 
-// Package intermediates embeds a list of known unexpired, unrevoked
-// intermediate certificates chaining to roots with Websites trust in the
-// Mozilla Root Program.
-//
-// This dataset is useful to establish connections to misconfigured servers that
-// fail to provide a full certificate chain but provide a valid, publicly
-// trusted end-entity certificate. Some browsers implement similar strategies to
-// successfully establish connections to these sites.
-//
-// Note that this might not be necessary if using the system roots on certain
-// operating systems, as the platform verifier might have its own mechanism to
-// fetch missing intermediates.
 package intermediates
 
 import (
-	"compress/flate"
-	"crypto/tls"
+	"bytes"
 	"crypto/x509"
-	_ "embed"
-	"io"
+	"encoding/pem"
+	"errors"
+	"fmt"
 	"strings"
-	"sync"
+
+	_ "embed"
 )
 
-//go:embed intermediates.bin
-var compressedPEMPool string //nolint:gochecknoglobals
+var (
 
-var _poolOnce sync.Once  //nolint:gochecknoglobals
-var _pool *x509.CertPool //nolint:gochecknoglobals
+	//go:embed certificates/PublicAllIntermediateCerts.pem
+	embeddedPublicAllIntermediateCerts []byte //nolint:gochecknoglobals
+	//go:embed certificates/MozillaIntermediateCerts.pem
+	embeddedMozillaIntermediateCerts []byte //nolint:gochecknoglobals
 
-func pool() *x509.CertPool {
-	_poolOnce.Do(func() {
-		r := flate.NewReader(strings.NewReader(compressedPEMPool))
-		pemList, _ := io.ReadAll(r)
-		_pool = x509.NewCertPool()
-		_pool.AppendCertsFromPEM(pemList)
-	})
-	return _pool
+	//go:embed certificates/PublicIntermediateCertsRevoked.pem
+	embeddedPublicIntermediateCertsRevoked []byte //nolint:gochecknoglobals
+)
+
+var (
+	//go:embed hashes/PublicAllIntermediateCertsHashes.txt
+	embeddedPublicAllIntermediateCertHashes []byte //nolint:gochecknoglobals
+
+	//go:embed hashes/MozillaIntermediateCertsHashes.txt
+	embeddedMozillaIntermediateCertHashes []byte //nolint:gochecknoglobals
+
+	//go:embed hashes/PublicIntermediateCertsRevokedHashes.txt
+	embeddedPublicIntermediateCertsRevokedHashes []byte //nolint:gochecknoglobals
+)
+
+var (
+	// ErrNoCertificatesFound indicates that no certificates were found. Since
+	// certificates are embedded this is a highly unusual error condition.
+	ErrNoCertificatesFound = errors.New("no certificates found")
+
+	// ErrNoCertificateHashesFound indicates that no certificate hashes were
+	// found. Since certificate hashes are embedded this is a highly unusual
+	// error.
+	ErrNoCertificateHashesFound = errors.New("no certificate hashes found")
+)
+
+// MustGetPublicAllIntermediateCerts returns an embedded certificates
+// collection containing a set of valid intermediate certificates and expired
+// intermediate certificates but not revoked intermediate certificates.
+//
+// These certificates must not be used as trusted roots. Instead, they can be
+// used as valid intermediate certificates for completing certificate chains.
+//
+// This function panics if an issue is encountered parsing the embedded
+// intermediates collection; because CI validates the intermediates bundle
+// generated from the upstream Mozilla report it is expected to always be in a
+// valid/consistent state.
+//
+// This collection is generated from reports provided by Mozilla via
+// https://wiki.mozilla.org/CA/Intermediate_Certificates
+func MustGetPublicAllIntermediateCerts() []*x509.Certificate {
+	return mustParseCertificates(embeddedPublicAllIntermediateCerts)
 }
 
-// Pool returns a new x509.CertPool containing a set of known WebPKI
-// intermediates chaining to roots in the Mozilla Root Program.
+// MustGetPublicAllIntermediateCertsHashes returns an embedded collection of
+// certificate hashes for valid intermediate certificates and expired
+// intermediate certificates but not revoked intermediate certificates.
 //
-// These certificates must not be used as trusted roots, but can be used as the
-// Intermediates pool in x509.VerifyOptions.
+// These hashes represent certificates that must not be used as trusted roots.
 //
-// The returned CertPool can be modified safely, for example to add
-// intermediates provided by the server, and multiple invocations return
-// distinct CertPools.
-func Pool() *x509.CertPool {
-	return copyCertPool(pool())
+// This function panics if an issue is encountered parsing the embedded
+// intermediates collection; because CI validates the intermediates bundle
+// generated from the upstream Mozilla report it is expected to always be in a
+// valid/consistent state.
+//
+// This collection is generated from reports provided by Mozilla via
+// https://wiki.mozilla.org/CA/Intermediate_Certificates
+func MustGetPublicAllIntermediateCertsHashes() []string {
+	return mustParseHashes(embeddedPublicAllIntermediateCertHashes)
 }
 
-// VerifyConnection is a function that can be used as the VerifyConnection
-// callback in a tls.Config for a client connection.
+// GetPublicAllIntermediateCerts returns an embedded certificates collection
+// containing a set of valid intermediate certificates and expired
+// intermediate certificates but not revoked intermediate certificates.
 //
-// It performs the same verification that crypto/tls does by default, but it
-// makes use of both the server's intermediates and this package's pool, and it
-// disregards the Time and RootCAs fields of tls.Config, using their default
-// values: the current time and the system roots.
-func VerifyConnection(cs tls.ConnectionState) error {
-	opts := x509.VerifyOptions{
-		DNSName:       cs.ServerName,
-		Intermediates: x509.NewCertPool(),
-	}
-	for _, cert := range cs.PeerCertificates[1:] {
-		opts.Intermediates.AddCert(cert)
-	}
-	_, err := cs.PeerCertificates[0].Verify(opts)
-	if err != nil {
-		// We could simply extend a copy of the pool with the server's
-		// intermediates and do a single verification, but CertPool.Clone is
-		// pretty expensive for such a large pool.
-		_, err = cs.PeerCertificates[0].Verify(x509.VerifyOptions{
-			DNSName:       cs.ServerName,
-			Intermediates: pool(),
-		})
-	}
-	return err
+// These certificates must not be used as trusted roots. Instead, they can be
+// used as valid intermediate certificates for completing certificate chains.
+//
+// This function returns an error if an issue is encountered parsing the
+// embedded intermediates collection. With CI validating the intermediates
+// bundle generated from the upstream Mozilla report it is expected to always
+// be in a valid/consistent state. Even so, this function allows the caller to
+// guard against any potential issues loading certificates.
+//
+// This collection is generated from reports provided by Mozilla via
+// https://wiki.mozilla.org/CA/Intermediate_Certificates
+func GetPublicAllIntermediateCerts() ([]*x509.Certificate, error) {
+	return parseCertificates(embeddedPublicAllIntermediateCerts)
 }
+
+// GetPublicAllIntermediateCertsHashes returns an embedded collection of
+// certificate hashes for valid intermediate certificates and expired
+// intermediate certificates but not revoked intermediate certificates.
+//
+// These hashes represent certificates that must not be used as trusted roots.
+//
+// This function returns an error if an issue is encountered parsing the
+// embedded intermediates collection. With CI validating the intermediates
+// bundle generated from the upstream Mozilla report it is expected to always
+// be in a valid/consistent state. Even so, this function allows the caller to
+// guard against any potential issues loading certificates.
+//
+// This collection is generated from reports provided by Mozilla via
+// https://wiki.mozilla.org/CA/Intermediate_Certificates
+func GetPublicAllIntermediateCertsHashes() ([]string, error) {
+	return parseHashes(embeddedPublicAllIntermediateCertHashes)
+}
+
+// MustGetMozillaIntermediateCerts returns an embedded certificates collection
+// containing a set of known WebPKI intermediates chaining to roots in the
+// Mozilla Root Program.
+//
+// These certificates must not be used as trusted roots. Instead, they can be
+// used as valid intermediate certificates for completing certificate chains.
+//
+// This function panics if an issue is encountered parsing the embedded
+// intermediates collection; because CI validates the intermediates bundle
+// generated from the upstream Mozilla report it is expected to always be in a
+// valid/consistent state.
+//
+// This collection is generated from reports provided by Mozilla via
+// https://wiki.mozilla.org/CA/Intermediate_Certificates
+func MustGetMozillaIntermediateCerts() []*x509.Certificate {
+	return mustParseCertificates(embeddedMozillaIntermediateCerts)
+}
+
+// MustGetMozillaIntermediateCertsHashes returns an embedded collection of
+// certificate hashes for a set of known WebPKI intermediates chaining to
+// roots in the Mozilla Root Program.
+//
+// These hashes represent certificates that must not be used as trusted roots.
+//
+// This function panics if an issue is encountered parsing the embedded
+// intermediates collection; because CI validates the intermediates bundle
+// generated from the upstream Mozilla report it is expected to always be in a
+// valid/consistent state.
+//
+// This collection is generated from reports provided by Mozilla via
+// https://wiki.mozilla.org/CA/Intermediate_Certificates
+func MustGetMozillaIntermediateCertsHashes() []string {
+	return mustParseHashes(embeddedMozillaIntermediateCertHashes)
+}
+
+// GetMozillaIntermediateCerts returns an embedded certificates collection
+// containing a set of known WebPKI intermediates chaining to roots in the
+// Mozilla Root Program.
+//
+// These certificates must not be used as trusted roots. Instead, they can be
+// used as valid intermediate certificates for completing certificate chains.
+//
+// This function returns an error if an issue is encountered parsing the
+// embedded intermediates collection. With CI validating the intermediates
+// bundle generated from the upstream Mozilla report it is expected to always
+// be in a valid/consistent state. Even so, this function allows the caller to
+// guard against any potential issues loading certificates.
+//
+// This collection is generated from reports provided by Mozilla via
+// https://wiki.mozilla.org/CA/Intermediate_Certificates
+func GetMozillaIntermediateCerts() ([]*x509.Certificate, error) {
+	return parseCertificates(embeddedMozillaIntermediateCerts)
+}
+
+// GetMozillaIntermediateCertsHashes returns an embedded collection of
+// certificate hashes for a set of known WebPKI intermediates chaining to
+// roots in the Mozilla Root Program.
+//
+// These hashes represent certificates that must not be used as trusted roots.
+//
+// This function returns an error if an issue is encountered parsing the
+// embedded intermediates collection. With CI validating the intermediates
+// bundle generated from the upstream Mozilla report it is expected to always
+// be in a valid/consistent state. Even so, this function allows the caller to
+// guard against any potential issues loading certificates.
+//
+// This collection is generated from reports provided by Mozilla via
+// https://wiki.mozilla.org/CA/Intermediate_Certificates
+func GetMozillaIntermediateCertsHashes() ([]string, error) {
+	return parseHashes(embeddedMozillaIntermediateCertHashes)
+}
+
+// MustGetPublicIntermediateCertsRevoked returns a certificates collection
+// containing revoked intermediate CA certificates which chained to roots in
+// the Mozilla Root Program.
+//
+// These certificates must not be used as trusted roots, nor should they be
+// used as valid intermediate certificates for completing certificate chains.
+// Instead, this collection is intended to assist diagnostic tools with
+// flagging problematic certificate chains.
+//
+// This function panics if an issue is encountered parsing the embedded
+// intermediates collection; because CI validates the intermediates bundle
+// generated from the upstream Mozilla report it is expected to always be in a
+// valid/consistent state.
+//
+// This collection is generated from reports provided by Mozilla via
+// https://wiki.mozilla.org/CA/Intermediate_Certificates
+//
+// NOTE: Due to parsing and decoding issues with the PEM data provided by the
+// upstream report this collection is missing just under 1% of the published
+// CA certificates. If you need a complete list it is recommended that you
+// consume the list of certificate hashes instead.
+func MustGetPublicIntermediateCertsRevoked() []*x509.Certificate {
+	return mustParseCertificates(embeddedPublicIntermediateCertsRevoked)
+}
+
+// MustGetPublicIntermediateCertsRevokedHashes returns an embedded collection
+// of certificate hashes for revoked intermediate CA certificates which
+// chained to roots in the Mozilla Root Program.
+//
+// These hashes represent certificates that must not be used as trusted roots.
+//
+// This function panics if an issue is encountered parsing the embedded
+// intermediates collection; because CI validates the intermediates bundle
+// generated from the upstream Mozilla report it is expected to always be in a
+// valid/consistent state.
+//
+// This collection is generated from reports provided by Mozilla via
+// https://wiki.mozilla.org/CA/Intermediate_Certificates
+func MustGetPublicIntermediateCertsRevokedHashes() []string {
+	return mustParseHashes(embeddedPublicIntermediateCertsRevokedHashes)
+}
+
+// GetPublicIntermediateCertsRevoked returns a certificates collection
+// containing revoked intermediate CA certificates which chained to roots in
+// the Mozilla Root Program.
+//
+// These certificates must not be used as trusted roots, nor should they be
+// used as valid intermediate certificates for completing certificate chains.
+// Instead, this collection is intended to assist diagnostic tools with
+// flagging problematic certificate chains.
+//
+// This function returns an error if an issue is encountered parsing the
+// embedded intermediates collection. With CI validating the intermediates
+// bundle generated from the upstream Mozilla report it is expected to always
+// be in a valid/consistent state. Even so, this function allows the caller to
+// guard against any potential issues loading certificates.
+//
+// This collection is generated from reports provided by Mozilla via
+// https://wiki.mozilla.org/CA/Intermediate_Certificates
+//
+// NOTE: Due to parsing and decoding issues with the PEM data provided by the
+// upstream report this collection is missing just under 1% of the published
+// CA certificates. If you need a complete list it is recommended that you
+// consume the list of certificate hashes instead.
+func GetPublicIntermediateCertsRevoked() ([]*x509.Certificate, error) {
+	return parseCertificates(embeddedPublicIntermediateCertsRevoked)
+}
+
+// GetPublicIntermediateCertsRevokedHashes returns an embedded collection of
+// certificate hashes for revoked intermediate CA certificates which chained
+// to roots in the Mozilla Root Program.
+//
+// These hashes represent certificates that must not be used as trusted roots.
+//
+// This function panics if an issue is encountered parsing the embedded
+// intermediates collection; because CI validates the intermediates bundle
+// generated from the upstream Mozilla report it is expected to always be in a
+// valid/consistent state.
+//
+// This collection is generated from reports provided by Mozilla via
+// https://wiki.mozilla.org/CA/Intermediate_Certificates
+func GetPublicIntermediateCertsRevokedHashes() ([]string, error) {
+	return parseHashes(embeddedPublicIntermediateCertsRevokedHashes)
+}
+
+// parseCertificates parses PEM-encoded certificates into x509.Certificate
+// values.
+func parseCertificates(pemData []byte) ([]*x509.Certificate, error) {
+	var certificates []*x509.Certificate
+
+	pemBlock := &pem.Block{}
+
+	// Create a buffer for the PEM data.
+	pemBuffer := bytes.NewBuffer(pemData)
+
+	// Decode each PEM block
+	for {
+		pemBlock, pemBuffer = decodePEMBlock(pemBuffer)
+		if pemBlock == nil {
+			break
+		}
+
+		// Skip non-certificate blocks
+		if pemBlock.Type != "CERTIFICATE" {
+			continue
+		}
+
+		// Parse the certificate
+		cert, err := x509.ParseCertificate(pemBlock.Bytes)
+		if err != nil {
+			return nil, fmt.Errorf("failed to parse certificate: %w", err)
+		}
+
+		certificates = append(certificates, cert)
+	}
+
+	if len(certificates) == 0 {
+		return nil, fmt.Errorf("PEM data invalid: %w", ErrNoCertificatesFound)
+	}
+
+	return certificates, nil
+}
+
+// mustParseCertificates parses PEM-encoded certificates into x509.Certificate
+// values.
+func mustParseCertificates(pemData []byte) []*x509.Certificate {
+	var certificates []*x509.Certificate
+
+	pemBlock := &pem.Block{}
+
+	// Create a buffer for the PEM data.
+	pemBuffer := bytes.NewBuffer(pemData)
+
+	// Decode each PEM block
+	for {
+		pemBlock, pemBuffer = decodePEMBlock(pemBuffer)
+		if pemBlock == nil {
+			break
+		}
+
+		// Skip non-certificate blocks
+		if pemBlock.Type != "CERTIFICATE" {
+			continue
+		}
+
+		// Parse the certificate
+		cert, err := x509.ParseCertificate(pemBlock.Bytes)
+		if err != nil {
+			panic(fmt.Errorf("failed to parse certificate: %w", err))
+		}
+
+		certificates = append(certificates, cert)
+	}
+
+	if len(certificates) == 0 {
+		panic(fmt.Errorf("PEM data invalid: %w", ErrNoCertificatesFound))
+	}
+
+	return certificates
+}
+
+func parseHashes(data []byte) ([]string, error) {
+	hashes := strings.Split(string(data), "\n")
+
+	// Remove trailing empty string, if present.
+	if len(hashes) > 0 && hashes[len(hashes)-1] == "" {
+		hashes = hashes[:len(hashes)-1]
+	}
+
+	if len(hashes) == 0 {
+		return nil, ErrNoCertificateHashesFound
+	}
+
+	return hashes, nil
+}
+
+func mustParseHashes(data []byte) []string {
+	hashes := strings.Split(string(data), "\n")
+
+	// Remove trailing empty string, if present.
+	if len(hashes) > 0 && hashes[len(hashes)-1] == "" {
+		hashes = hashes[:len(hashes)-1]
+	}
+
+	if len(hashes) == 0 {
+		panic(ErrNoCertificateHashesFound)
+	}
+
+	return hashes
+}
+
+// decodePEMBlock decodes a single PEM block from the buffer. A new buffer
+// containing the unprocessed PEM data is returned along with the decoded PEM
+// block.
+func decodePEMBlock(pemBuffer *bytes.Buffer) (*pem.Block, *bytes.Buffer) {
+	if pemBuffer.Len() == 0 {
+		return nil, pemBuffer
+	}
+
+	block, rest := pem.Decode(pemBuffer.Bytes())
+	if block == nil {
+		return nil, pemBuffer
+	}
+
+	pemBuffer = bytes.NewBuffer(rest)
+	return block, pemBuffer
+}
+
+// func maxVal(nums ...int) int {
+//         if len(nums) == 0 {
+//                 return 0
+//         }
+//
+//         maxValue := nums[0]
+//         for _, num := range nums[1:] {
+//                 if num > maxValue {
+//                         maxValue = num
+//                 }
+//         }
+//         return maxValue
+// }
