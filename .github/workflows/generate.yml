@@ -133,8 +133,14 @@ jobs:
         # run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
         run: git config --global --add safe.directory "${PWD}"
 
-      - name: Regenerate pool
+      - name: Regenerate certificate data from upstream CCADB reports
         run: go generate
+
+      - name: Archive files
+        run: |-
+          mv -v *.csv mozilla_reports/
+          mv -v *.pem certificates/
+          mv -v *.txt hashes/
 
       - name: Run tests
         run: go test -race ./...
@@ -153,6 +159,11 @@ jobs:
         env:
           NEXT_TAG: ${{ needs.git_describe_semver.outputs.version }}
         run: |-
+          git add mozilla_reports
+          git add certificates
+          git add hashes
+          git add count.go
+
           git commit -a -m "intermediates: update certificates" || exit 0
 
           bash create-tag.sh "${NEXT_TAG}"

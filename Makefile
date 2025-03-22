@@ -11,10 +11,14 @@
 
 SHELL = /bin/bash
 
-BUILDCMD				=	go build -mod=vendor ./...
+OUTPUTDIR 				:= release_assets
+
+ASSETS_PATH				:= $(CURDIR)/$(OUTPUTDIR)
+
+PROJECT_DIR				:= $(CURDIR)
+
 GOCLEANCMD				=	go clean -mod=vendor ./...
 GITCLEANCMD				= 	git clean -xfd
-CHECKSUMCMD				=	sha256sum -b
 
 .DEFAULT_GOAL := help
 
@@ -79,6 +83,10 @@ goclean:
 	@echo "Removing object files and cached files ..."
 	@$(GOCLEANCMD)
 
+	@echo "Removing any existing release assets"
+	@mkdir -p "$(ASSETS_PATH)"
+	@rm -vf $(wildcard $(ASSETS_PATH)/*)
+
 .PHONY: clean
 ## clean: alias for goclean
 clean: goclean
@@ -96,7 +104,7 @@ pristine: goclean gitclean
 .PHONY: all
 # https://stackoverflow.com/questions/3267145/makefile-execute-another-target
 ## all: run all applicable build steps
-all: clean build
+all: clean prep-assets
 	@echo "Completed build process ..."
 
 .PHONY: quick
@@ -105,10 +113,43 @@ quick: clean build
 	@echo "Completed tasks for quick build"
 
 .PHONY: build
-## build: ensure that packages build
-build:
-	@echo "Building packages ..."
+## build: alias for prep-assets recipe
+build: clean prep-assets
+	@echo "Completed tasks for quick build"
 
-	$(BUILDCMD)
+.PHONY: podman-release-build
+## podman-release-build: alias for prep-assets recipe
+podman-release-build: clean prep-assets
+	@echo "Completed tasks for release"
+
+.PHONY: prep-assets
+## prep-assets: prepare assets for release
+prep-assets:
+	@echo "Collecting assets for release ..."
+
+	mkdir -vp release_assets
+
+	cp -v mozilla_reports/*.csv release_assets/
+	cp -v mozilla_reports/CDLA-Permissive-2.0.txt release_assets/
+
+	cp -v certificates/*.pem release_assets/
+
+	cp -v hashes/*.txt release_assets/
 
 	@echo "Completed build tasks"
+
+.PHONY: regenerate
+## regenerate: regenerate project assets
+regenerate:
+	@echo "Regenerating project assets ..."
+	@go generate
+
+	@echo "Archiving files ..."
+	@mv -v *.csv mozilla_reports/
+	@mv -v *.pem certificates/
+	@mv -v *.txt hashes/
+
+	@echo "Running project tests to validate generated assets ..."
+	@go test ./...
+
+	@echo "Completed assets regeneration tasks"

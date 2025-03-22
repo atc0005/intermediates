@@ -25,8 +25,13 @@ jobs:
       # generating release assets as part of creating an automated release
       # upon pushing a tag.
       #
+      # Other library projects such as this one (atc0005/intermediates)
+      # explicitly set this value to true (which is the default) to
+      # communicate that we wish to generate release assets, which is outside
+      # the norm for library projects consuming these shared workflows.
+      #
       # See also:
       #
       # - https://github.com/atc0005/shared-project-resources/pull/141
       #
-      generate-assets: false
+      generate-assets: true
