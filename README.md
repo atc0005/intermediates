@@ -2,7 +2,7 @@
 # atc0005/intermediates
 
 Package intermediates provides embedded hashes and intermediate certificates
-chaining to roots with Websites trust in the Mozilla Root Program.
+chaining to roots in the Mozilla Root Program.
 
 [![Latest Release](https://img.shields.io/github/release/atc0005/intermediates.svg?style=flat-square)](https://github.com/atc0005/intermediates/releases/latest)
 [![Go Reference](https://pkg.go.dev/badge/github.com/atc0005/intermediates.svg)](https://pkg.go.dev/github.com/atc0005/intermediates)
