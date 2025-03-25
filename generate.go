@@ -8,9 +8,8 @@
 //go:build generate
 // +build generate
 
-// Tool used to generate intermediate certificates bundle from unexpired,
-// unrevoked intermediate certificates chaining to roots with Websites trust
-// in the Mozilla Root Program.
+// Tool used to generate intermediate certificate hashes and certificates
+// chaining to roots in the Mozilla Root Program.
 package main
 
 import (
