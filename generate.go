@@ -662,6 +662,8 @@ func generateHashFile(inputCSVFile string, outputTXTFile string, csvColumns inte
 		hashes = append(hashes, record[csvColumns.Hash])
 	}
 
+	sort.Strings(hashes)
+
 	fh, err := os.Create(filepath.Clean(outputTXTFile))
 	if err != nil {
 		return 0, err
