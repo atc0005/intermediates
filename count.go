@@ -3,10 +3,10 @@
 package intermediates
 
 const (
-	expectedCountPublicAllIntermediateCerts           = 2441
-	expectedCountPublicAllIntermediateCertsHashes     = 2441
-	expectedCountMozillaIntermediateCertsReport       = 1781
-	expectedCountMozillaIntermediateCertsReportHashes = 1781
+	expectedCountPublicAllIntermediateCerts           = 2447
+	expectedCountPublicAllIntermediateCertsHashes     = 2447
+	expectedCountMozillaIntermediateCertsReport       = 1787
+	expectedCountMozillaIntermediateCertsReportHashes = 1787
 	expectedCountPublicIntermediateCertsRevoked       = 2588
 	expectedCountPublicIntermediateCertsRevokedHashes = 2610
 )
