@@ -439,12 +439,12 @@ func generateAllIntermediatesFiles(counterLog *writtenCounterLog) error {
 	columns := intermediateCSVColumns{
 		Subject:            5,                     // Column F
 		Issuer:             3,                     // Column D
-		PEM:                23,                    // Column X
-		PEMHeaderName:      "PEM Info",            // Column X
+		PEM:                25,                    // Column Z
+		PEMHeaderName:      "PEM Info",            // Column Z
 		Hash:               8,                     // Column I
 		HashHeaderName:     "SHA-256 Fingerprint", // Column I
-		Comments:           22,                    // Column W
-		CommentsHeaderName: "Comments",            // Column W
+		Comments:           24,                    // Column Y
+		CommentsHeaderName: "Comments",            // Column Y
 	}
 
 	pemWritten, err := generatePEMFile(
