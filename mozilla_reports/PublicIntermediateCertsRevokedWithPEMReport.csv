@@ -79605,7 +79605,7 @@ W4c3DCCQx7V5kwwkCdigTlagH5WNTm76jg2TE5STdNk1zCIvo0EEi8nLvDJtU6tg
 68eLyd6KpuTiGSVKGS+UTS5Gk4evu5GFSxNvGKKbaUpo0WMEu50LUczmJXNd+vBj
 fSa+4ioiMbkgnSGPUZZ1fUhLCrpqPiPPgnc+J63Z2qnKS7EuU3g3GgKChw==
 -----END CERTIFICATE-----'"
-"Netlock","Revoked","(0) unspecified","2020 Jun 02","Added to OneCRL","49412CE4005BDEECF6B9530D8534","NETLOCK Trust EV CA 2","NetLock Arany (Class Gold) Főtanúsítvány","NetLock Kft.","NETLOCK Trust EV CA 2","NETLOCK Ltd.","CD0CC3A6F6857D427D6D98F6BF877E0845E365C5BAC61C9BAF27AE0AC3681A57","142FF83330BC460A960F92843DDDE843C3D32666F673D469372FE02076DEB6FC","2019 Apr 23","2028 May 05","RSA 2048 bits","SHA256WithRSA","http://crl1.netlock.hu/index.cgi?crl=gold, http://crl2.netlock.hu/index.cgi?crl=gold, http://crl3.netlock.hu/index.cgi?crl=gold","","","'-----BEGIN CERTIFICATE-----
+"Netlock","Revoked","(5) cessationOfOperation","2020 Jun 02","Added to OneCRL","49412CE4005BDEECF6B9530D8534","NETLOCK Trust EV CA 2","NetLock Arany (Class Gold) Főtanúsítvány","NetLock Kft.","NETLOCK Trust EV CA 2","NETLOCK Ltd.","CD0CC3A6F6857D427D6D98F6BF877E0845E365C5BAC61C9BAF27AE0AC3681A57","142FF83330BC460A960F92843DDDE843C3D32666F673D469372FE02076DEB6FC","2019 Apr 23","2028 May 05","RSA 2048 bits","SHA256WithRSA","http://crl1.netlock.hu/index.cgi?crl=gold, http://crl2.netlock.hu/index.cgi?crl=gold, http://crl3.netlock.hu/index.cgi?crl=gold","","","'-----BEGIN CERTIFICATE-----
 MIIGDjCCBPagAwIBAgIOSUEs5ABb3uz2uVMNhTQwDQYJKoZIhvcNAQELBQAwgacx
 CzAJBgNVBAYTAkhVMREwDwYDVQQHDAhCdWRhcGVzdDEVMBMGA1UECgwMTmV0TG9j
 ayBLZnQuMTcwNQYDVQQLDC5UYW7DunPDrXR2w6FueWtpYWTDs2sgKENlcnRpZmlj
@@ -79640,7 +79640,7 @@ b0vv4xY4vyV4C5Cxf0X060pLjIKG9lXE1lOAXrF6TXbE5SgQA495ojADzQNhkOSW
 q0kHONVBISsiFMxNidFGxR4MFoh1MNFRVTce8RTtK7uKgX8px4CDRiscqvJOYQQo
 BToKrLEQJ5+1sm3RUh+tc8n2
 -----END CERTIFICATE-----'"
-"Netlock","Revoked","(0) unspecified","2020 Jun 02","Added to OneCRL","49412CE4005A93CF96EBF57CF11D","NETLOCK Trust Qualified EV CA 2","NetLock Arany (Class Gold) Főtanúsítvány","NetLock Kft.","NETLOCK Trust Qualified EV CA 2","NETLOCK Ltd.","36EFD13AE5DC6D01B6C1956841B45D18CE8085FBC197D90E8A8A21A9B01EBFBA","43D3B69891DF83020366A92E4C54C3E00ACA5F66744A5C2A4842FAAD6215194E","2019 Apr 02","2028 Oct 31","RSA 2048 bits","SHA256WithRSA","http://crl1.netlock.hu/index.cgi?crl=gold, http://crl2.netlock.hu/index.cgi?crl=gold, http://crl3.netlock.hu/index.cgi?crl=gold","","","'-----BEGIN CERTIFICATE-----
+"Netlock","Revoked","(5) cessationOfOperation","2020 Jun 02","Added to OneCRL","49412CE4005A93CF96EBF57CF11D","NETLOCK Trust Qualified EV CA 2","NetLock Arany (Class Gold) Főtanúsítvány","NetLock Kft.","NETLOCK Trust Qualified EV CA 2","NETLOCK Ltd.","36EFD13AE5DC6D01B6C1956841B45D18CE8085FBC197D90E8A8A21A9B01EBFBA","43D3B69891DF83020366A92E4C54C3E00ACA5F66744A5C2A4842FAAD6215194E","2019 Apr 02","2028 Oct 31","RSA 2048 bits","SHA256WithRSA","http://crl1.netlock.hu/index.cgi?crl=gold, http://crl2.netlock.hu/index.cgi?crl=gold, http://crl3.netlock.hu/index.cgi?crl=gold","","","'-----BEGIN CERTIFICATE-----
 MIIGGDCCBQCgAwIBAgIOSUEs5ABak8+W6/V88R0wDQYJKoZIhvcNAQELBQAwgacx
 CzAJBgNVBAYTAkhVMREwDwYDVQQHDAhCdWRhcGVzdDEVMBMGA1UECgwMTmV0TG9j
 ayBLZnQuMTcwNQYDVQQLDC5UYW7DunPDrXR2w6FueWtpYWTDs2sgKENlcnRpZmlj
@@ -79675,7 +79675,7 @@ G5jqlL6yfi2gwk7owpxsdQF5IMcWDOq7llf0Gh/15dGJd1mJXx7QgHNu6iLmu8nT
 GBYpIbOPmgOVf5FCyQQZTEtcvRxYbJCrdDA6d6bWMQI0hsXmAy6NQyMrxxG7UTk3
 USSjTC7F4INChT35WgTU7BAy7LeV6t3PVyzgTQ==
 -----END CERTIFICATE-----'"
-"Netlock","Revoked","(0) unspecified","2019 Sep 03","Added to OneCRL","49412CE40048","NETLOCK Trust EV CA","NetLock Arany (Class Gold) Főtanúsítvány","NetLock Kft.","NETLOCK Trust EV CA","NETLOCK Ltd.","A476FE1FBFEBA08175A0C34807990B86E63B5AA2D6CE579C4F456C95575BB1F6","B794CBEC5A38B94495187EDC52FAD2B7FEE6395BC3DBB72C4D9357C9F00A71EA","2016 Sep 28","2028 Jul 07","RSA 2048 bits","SHA256WithRSA","http://crl1.netlock.hu/index.cgi?crl=gold, http://crl2.netlock.hu/index.cgi?crl=gold, http://crl3.netlock.hu/index.cgi?crl=gold","","","'-----BEGIN CERTIFICATE-----
+"Netlock","Revoked","(5) cessationOfOperation","2019 Sep 03","Added to OneCRL","49412CE40048","NETLOCK Trust EV CA","NetLock Arany (Class Gold) Főtanúsítvány","NetLock Kft.","NETLOCK Trust EV CA","NETLOCK Ltd.","A476FE1FBFEBA08175A0C34807990B86E63B5AA2D6CE579C4F456C95575BB1F6","B794CBEC5A38B94495187EDC52FAD2B7FEE6395BC3DBB72C4D9357C9F00A71EA","2016 Sep 28","2028 Jul 07","RSA 2048 bits","SHA256WithRSA","http://crl1.netlock.hu/index.cgi?crl=gold, http://crl2.netlock.hu/index.cgi?crl=gold, http://crl3.netlock.hu/index.cgi?crl=gold","","","'-----BEGIN CERTIFICATE-----
 MIIFxzCCBK+gAwIBAgIGSUEs5ABIMA0GCSqGSIb3DQEBCwUAMIGnMQswCQYDVQQG
 EwJIVTERMA8GA1UEBwwIQnVkYXBlc3QxFTATBgNVBAoMDE5ldExvY2sgS2Z0LjE3
 MDUGA1UECwwuVGFuw7pzw610dsOhbnlraWFkw7NrIChDZXJ0aWZpY2F0aW9uIFNl
@@ -79708,7 +79708,7 @@ wRGT0kIW3Eh2IpcdGielAQ7I/paodyM7PdXoyPcPyySKH+RrFu1g5FZYr8NSja+o
 FTuX4G+X0ymxa/5NNEJ5A0HpgjawMejopnvoPoL882c4P3hpnlZFvi/Uoy+6Y10W
 TvpeKrNXIe8LNTPDpMYr2OvmVB5bpL5WIKZHhlCh7/7zCIqolEVMTkvzng==
 -----END CERTIFICATE-----'"
-"Netlock","Revoked","(0) unspecified","2019 Sep 03","Added to OneCRL","49412CE40046","NETLOCK Trust Qualified EV CA","NetLock Arany (Class Gold) Főtanúsítvány","NetLock Kft.","NETLOCK Trust Qualified EV CA","NETLOCK Ltd.","B0F25A6D9A96315C7CDAEA3E490E7BFA9FB17310B0701B7CD6FF432530837730","5E641C654E106099251E20EB1FA456547F920610E5A867DD5FDF8D8876EE500C","2016 Sep 28","2028 Jul 07","RSA 2048 bits","SHA256WithRSA","http://crl1.netlock.hu/index.cgi?crl=gold, http://crl2.netlock.hu/index.cgi?crl=gold, http://crl3.netlock.hu/index.cgi?crl=gold","","","'-----BEGIN CERTIFICATE-----
+"Netlock","Revoked","(5) cessationOfOperation","2019 Sep 03","Added to OneCRL","49412CE40046","NETLOCK Trust Qualified EV CA","NetLock Arany (Class Gold) Főtanúsítvány","NetLock Kft.","NETLOCK Trust Qualified EV CA","NETLOCK Ltd.","B0F25A6D9A96315C7CDAEA3E490E7BFA9FB17310B0701B7CD6FF432530837730","5E641C654E106099251E20EB1FA456547F920610E5A867DD5FDF8D8876EE500C","2016 Sep 28","2028 Jul 07","RSA 2048 bits","SHA256WithRSA","http://crl1.netlock.hu/index.cgi?crl=gold, http://crl2.netlock.hu/index.cgi?crl=gold, http://crl3.netlock.hu/index.cgi?crl=gold","","","'-----BEGIN CERTIFICATE-----
 MIIF0TCCBLmgAwIBAgIGSUEs5ABGMA0GCSqGSIb3DQEBCwUAMIGnMQswCQYDVQQG
 EwJIVTERMA8GA1UEBwwIQnVkYXBlc3QxFTATBgNVBAoMDE5ldExvY2sgS2Z0LjE3
 MDUGA1UECwwuVGFuw7pzw610dsOhbnlraWFkw7NrIChDZXJ0aWZpY2F0aW9uIFNl
@@ -79742,7 +79742,7 @@ OW/p8qvGXm5fUv1PyEgKOsw5/NHef26NtjEHNy76eQCxIKPi7tfFUF3aFZeNct2v
 IgXxwP5AB9f44Dm+4ObmLpNHRO7oQXsdKICi0Ac+jt+9xPgsJdRBiM2lnvwu+Yae
 xCHSu8c=
 -----END CERTIFICATE-----'"
-"Netlock","Revoked","(0) unspecified","2018 Aug 16","Added to OneCRL","49412CE40021","Keler Hitelesítő Alegység Eat.","NetLock Arany (Class Gold) Főtanúsítvány","NetLock Kft.","Keler Hitelesítő Alegység Eat.","NetLock Kft.","73C27704C3B312807D18155B3AD06907DC9A374B66FBEDC2BC2973031A6BE988","85DF125FA2C450E9CCAD34F52BE20EEC7858E4A9B312832DD77F84030BDD4349","2012 Jun 07","2019 Jun 06","RSA 2048 bits","SHA256WithRSA","http://crl1.netlock.hu/index.cgi?crl=gold, http://crl2.netlock.hu/index.cgi?crl=gold, http://crl3.netlock.hu/index.cgi?crl=gold","","","'-----BEGIN CERTIFICATE-----
+"Netlock","Revoked","(5) cessationOfOperation","2018 Aug 16","Added to OneCRL","49412CE40021","Keler Hitelesítő Alegység Eat.","NetLock Arany (Class Gold) Főtanúsítvány","NetLock Kft.","Keler Hitelesítő Alegység Eat.","NetLock Kft.","73C27704C3B312807D18155B3AD06907DC9A374B66FBEDC2BC2973031A6BE988","85DF125FA2C450E9CCAD34F52BE20EEC7858E4A9B312832DD77F84030BDD4349","2012 Jun 07","2019 Jun 06","RSA 2048 bits","SHA256WithRSA","http://crl1.netlock.hu/index.cgi?crl=gold, http://crl2.netlock.hu/index.cgi?crl=gold, http://crl3.netlock.hu/index.cgi?crl=gold","","","'-----BEGIN CERTIFICATE-----
 MIIGEjCCBPqgAwIBAgIGSUEs5AAhMA0GCSqGSIb3DQEBCwUAMIGnMQswCQYDVQQG
 EwJIVTERMA8GA1UEBwwIQnVkYXBlc3QxFTATBgNVBAoMDE5ldExvY2sgS2Z0LjE3
 MDUGA1UECwwuVGFuw7pzw610dsOhbnlraWFkw7NrIChDZXJ0aWZpY2F0aW9uIFNl
@@ -79777,7 +79777,7 @@ wrlrR7/LtbDFTu/JO2Ygf8UopsniBlvuAECvtxDi6YJag1F/4GXmpDBGX8lDaOo+
 8LfTJARhGIyQZZN4WckZn686CbajRCSJn75kxs0jo7vT2rRedQ80X8CBSpNwyK4Z
 ScAfOysNI09fqjIdPhhMpYuXrNuQ+w==
 -----END CERTIFICATE-----'"
-"Netlock","Revoked","(0) unspecified","2018 Aug 16","Added to OneCRL","49412CE4001F","Keler Hitelesítő Alegység","NetLock Arany (Class Gold) Főtanúsítvány","NetLock Kft.","Keler Hitelesítő Alegység","NetLock Kft.","EE2723FB2591671774DE5EF80BEC656A7AF01F3B24067AF269EE35301891AC51","EE0FBA7F1DDC986C69B26AC86E4F2F97AB12217EC643A84BAB768EB94946248C","2012 Jun 07","2019 Jun 06","RSA 2048 bits","SHA256WithRSA","http://crl1.netlock.hu/index.cgi?crl=gold, http://crl2.netlock.hu/index.cgi?crl=gold, http://crl3.netlock.hu/index.cgi?crl=gold","","","'-----BEGIN CERTIFICATE-----
+"Netlock","Revoked","(5) cessationOfOperation","2018 Aug 16","Added to OneCRL","49412CE4001F","Keler Hitelesítő Alegység","NetLock Arany (Class Gold) Főtanúsítvány","NetLock Kft.","Keler Hitelesítő Alegység","NetLock Kft.","EE2723FB2591671774DE5EF80BEC656A7AF01F3B24067AF269EE35301891AC51","EE0FBA7F1DDC986C69B26AC86E4F2F97AB12217EC643A84BAB768EB94946248C","2012 Jun 07","2019 Jun 06","RSA 2048 bits","SHA256WithRSA","http://crl1.netlock.hu/index.cgi?crl=gold, http://crl2.netlock.hu/index.cgi?crl=gold, http://crl3.netlock.hu/index.cgi?crl=gold","","","'-----BEGIN CERTIFICATE-----
 MIIGDTCCBPWgAwIBAgIGSUEs5AAfMA0GCSqGSIb3DQEBCwUAMIGnMQswCQYDVQQG
 EwJIVTERMA8GA1UEBwwIQnVkYXBlc3QxFTATBgNVBAoMDE5ldExvY2sgS2Z0LjE3
 MDUGA1UECwwuVGFuw7pzw610dsOhbnlraWFkw7NrIChDZXJ0aWZpY2F0aW9uIFNl
@@ -79812,7 +79812,7 @@ BZXDXIJwJN/WMrEvUkHVX+VjtFlkMbquF0YVNoUVUwkOo8yjnqqvFnU+ho011X/u
 UEmjRqi1m/IK4ZYYhWUrNQFmGivHTr/WeVUom2p0V0mhAvtXyzQTzacmObmwme5T
 SEs0uCM/jL/EWJGSruLwOOA=
 -----END CERTIFICATE-----'"
-"Netlock","Revoked","(0) unspecified","2019 Sep 03","Added to OneCRL","49412CE4005384E7A929C8B95738","NETLOCK Trust SSL CA","NetLock Arany (Class Gold) Főtanúsítvány","NetLock Kft.","NETLOCK Trust SSL CA","NETLOCK Ltd.","0A778BF9DD7F75B2F983FB7FA705C987CCCB5877404BE7EB5D8BA0B73545D0D9","11CFC1FBA51EB02CCF717BD37A2DAB3F4911FB55916073244DABF2706046955D","2017 Oct 05","2028 Sep 17","RSA 2048 bits","SHA256WithRSA","http://crl1.netlock.hu/index.cgi?crl=gold, http://crl2.netlock.hu/index.cgi?crl=gold, http://crl3.netlock.hu/index.cgi?crl=gold","","","'-----BEGIN CERTIFICATE-----
+"Netlock","Revoked","(5) cessationOfOperation","2019 Sep 03","Added to OneCRL","49412CE4005384E7A929C8B95738","NETLOCK Trust SSL CA","NetLock Arany (Class Gold) Főtanúsítvány","NetLock Kft.","NETLOCK Trust SSL CA","NETLOCK Ltd.","0A778BF9DD7F75B2F983FB7FA705C987CCCB5877404BE7EB5D8BA0B73545D0D9","11CFC1FBA51EB02CCF717BD37A2DAB3F4911FB55916073244DABF2706046955D","2017 Oct 05","2028 Sep 17","RSA 2048 bits","SHA256WithRSA","http://crl1.netlock.hu/index.cgi?crl=gold, http://crl2.netlock.hu/index.cgi?crl=gold, http://crl3.netlock.hu/index.cgi?crl=gold","","","'-----BEGIN CERTIFICATE-----
 MIIF0DCCBLigAwIBAgIOSUEs5ABThOepKci5VzgwDQYJKoZIhvcNAQELBQAwgacx
 CzAJBgNVBAYTAkhVMREwDwYDVQQHDAhCdWRhcGVzdDEVMBMGA1UECgwMTmV0TG9j
 ayBLZnQuMTcwNQYDVQQLDC5UYW7DunPDrXR2w6FueWtpYWTDs2sgKENlcnRpZmlj
@@ -79938,7 +79938,7 @@ kjLP/bUYiqPsFH8R1+MzYFr/Yt8YAiiZc2oohrW6NdM5Vd9kJ3DFPAFWJLDmBVMB
 OvnnTTdNAZ2DuHRbiNwIqiP+QIYuQmDKIkrKkanhetRpY9Kzbni4imhYlZ2wNGJq
 MlUiqjvEzhxmmJ6JAUmjmpIfTL4xad8AkEG+E2NgrovPKGpARapHK50=
 -----END CERTIFICATE-----'"
-"Netlock","Revoked","(0) unspecified","2021 Sep 28","Added to OneCRL","49412CE40027","NetLock OnlineSSL (Class Online) Tanúsítványkiadó","NetLock Arany (Class Gold) Főtanúsítvány","NetLock Kft.","NetLock OnlineSSL (Class Online) Tanúsítványkiadó","NetLock Kft.","CC9F72544FF617C14CEBE8283194A70F1E8981CF163D5A3FD8DCCFD846D5DC1A","02604F66B444AA4667592452B1376216B9D2055A3E715682117B95E0FEE4ADA2","2012 Aug 07","2027 Oct 23","RSA 2048 bits","SHA256WithRSA","http://crl1.netlock.hu/index.cgi?crl=gold, http://crl2.netlock.hu/index.cgi?crl=gold, http://crl3.netlock.hu/index.cgi?crl=gold","","","'-----BEGIN CERTIFICATE-----
+"Netlock","Revoked","(5) cessationOfOperation","2021 Sep 28","Added to OneCRL","49412CE40027","NetLock OnlineSSL (Class Online) Tanúsítványkiadó","NetLock Arany (Class Gold) Főtanúsítvány","NetLock Kft.","NetLock OnlineSSL (Class Online) Tanúsítványkiadó","NetLock Kft.","CC9F72544FF617C14CEBE8283194A70F1E8981CF163D5A3FD8DCCFD846D5DC1A","02604F66B444AA4667592452B1376216B9D2055A3E715682117B95E0FEE4ADA2","2012 Aug 07","2027 Oct 23","RSA 2048 bits","SHA256WithRSA","http://crl1.netlock.hu/index.cgi?crl=gold, http://crl2.netlock.hu/index.cgi?crl=gold, http://crl3.netlock.hu/index.cgi?crl=gold","","","'-----BEGIN CERTIFICATE-----
 MIIGJjCCBQ6gAwIBAgIGSUEs5AAnMA0GCSqGSIb3DQEBCwUAMIGnMQswCQYDVQQG
 EwJIVTERMA8GA1UEBwwIQnVkYXBlc3QxFTATBgNVBAoMDE5ldExvY2sgS2Z0LjE3
 MDUGA1UECwwuVGFuw7pzw610dsOhbnlraWFkw7NrIChDZXJ0aWZpY2F0aW9uIFNl
