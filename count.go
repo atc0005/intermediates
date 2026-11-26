@@ -7,6 +7,6 @@ const (
 	expectedCountPublicAllIntermediateCertsHashes     = 2483
 	expectedCountMozillaIntermediateCertsReport       = 1707
 	expectedCountMozillaIntermediateCertsReportHashes = 1707
-	expectedCountPublicIntermediateCertsRevoked       = 3070
-	expectedCountPublicIntermediateCertsRevokedHashes = 3092
+	expectedCountPublicIntermediateCertsRevoked       = 3072
+	expectedCountPublicIntermediateCertsRevokedHashes = 3094
 )
